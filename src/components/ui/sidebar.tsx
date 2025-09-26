@@ -348,12 +348,16 @@ const SidebarHeader = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div">
 >(({ className, ...props }, ref) => {
-  const { isMobile, setOpen } = useSidebar();
+  const { isMobile } = useSidebar();
 
   if (isMobile) {
     return (
       <SheetHeader className="p-4 flex flex-row items-center justify-between">
           <SheetTitle>GreenNotes</SheetTitle>
+          <SheetClose className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary p-1">
+            <X className="h-4 w-4" />
+            <span className="sr-only">Close</span>
+          </SheetClose>
       </SheetHeader>
     )
   }
