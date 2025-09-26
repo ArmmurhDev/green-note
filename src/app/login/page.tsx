@@ -48,12 +48,12 @@ export default function LoginPage() {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                   <Checkbox id="remember-me" />
-                  <Label
+                  <label
                     htmlFor="remember-me"
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
                     Remember me
-                  </Label>
+                  </label>
               </div>
               <Link
                 href="/reset-password"
