@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useNotes } from '@/hooks/use-notes';
@@ -11,6 +12,7 @@ import {
   SidebarHeader,
   SidebarInset,
   SidebarTrigger,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { FilePlus2, Notebook } from 'lucide-react';
@@ -19,7 +21,8 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 export default function App() {
-  const { notes, selectedNoteId, editingNoteId, searchTerm, setEditingNoteId, openMobile, setOpenMobile } = useNotes();
+  const { notes, selectedNoteId, editingNoteId, searchTerm, setEditingNoteId } = useNotes();
+  const { openMobile, setOpenMobile } = useSidebar();
   const isMobile = useIsMobile();
 
   const selectedNote = useMemo(() => notes.find(n => n.id === selectedNoteId), [notes, selectedNoteId]);
@@ -80,7 +83,9 @@ export default function App() {
                 <div className="p-4 flex items-center justify-between">
                     <h1 className="text-lg font-bold">GreenNotes</h1>
                     <SheetTrigger asChild>
-                      <SidebarTrigger />
+                      <Button variant="ghost" size="icon">
+                        <PanelLeft />
+                      </Button>
                     </SheetTrigger>
                 </div>
               <main className="h-full">

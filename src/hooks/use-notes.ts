@@ -1,16 +1,15 @@
+
 "use client";
 
 import { useContext } from 'react';
 import { NotesContext, type NotesContextType } from '@/app/notes-provider';
-import { useSidebar } from '@/components/ui/sidebar';
 
-export const useNotes = (): NotesContextType & { openMobile: boolean, setOpenMobile: (open: boolean) => void } => {
+export const useNotes = (): NotesContextType => {
   const context = useContext(NotesContext);
-  const sidebarContext = useSidebar();
   
   if (!context) {
     throw new Error('useNotes must be used within a NotesProvider');
   }
 
-  return { ...context, openMobile: sidebarContext?.openMobile ?? false, setOpenMobile: sidebarContext?.setOpenMobile ?? (() => {}) };
+  return context;
 };
