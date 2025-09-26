@@ -8,14 +8,15 @@ import { Label } from "@/components/ui/label";
 import { Notebook } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Checkbox } from "@/components/ui/checkbox";
 
-export default function LoginPage() {
+export default function ResetPasswordPage() {
     const router = useRouter();
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleReset = (e: React.FormEvent) => {
         e.preventDefault();
-        router.push('/notes');
+        // Here you would typically handle the password reset logic
+        console.log('Password reset link sent!');
+        router.push('/login');
     }
 
   return (
@@ -25,13 +26,13 @@ export default function LoginPage() {
             <div className="flex justify-center items-center mb-4">
                 <Notebook className="h-12 w-12 text-primary" />
             </div>
-          <CardTitle className="text-2xl">Login to GreenNotes</CardTitle>
+          <CardTitle className="text-2xl">Reset your password</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Enter your email to receive a link to reset your password.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleLogin} className="grid gap-4">
+          <form onSubmit={handleReset} className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -41,35 +42,14 @@ export default function LoginPage() {
                 required
               />
             </div>
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
-                <Link
-                  href="/reset-password"
-                  className="ml-auto inline-block text-sm underline"
-                >
-                  Forgot your password?
-                </Link>
-              </div>
-              <Input id="password" type="password" required />
-            </div>
-            <div className="flex items-center space-x-2">
-                <Checkbox id="remember-me" />
-                <Label
-                  htmlFor="remember-me"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Remember me
-                </Label>
-            </div>
             <Button type="submit" className="w-full">
-              Login
+              Send reset link
             </Button>
           </form>
           <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{" "}
-            <Link href="/signup" className="underline">
-              Sign up
+            Remembered your password?{" "}
+            <Link href="/login" className="underline">
+              Login
             </Link>
           </div>
         </CardContent>
