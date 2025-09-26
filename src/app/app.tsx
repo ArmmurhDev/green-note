@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button';
 import { FilePlus2, Notebook } from 'lucide-react';
 import { useMemo } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Sheet } from '@/components/ui/sheet';
 
 export default function App() {
   const { notes, selectedNoteId, editingNoteId, searchTerm, setEditingNoteId, setOpenMobile } = useNotes();
