@@ -16,9 +16,11 @@ import {
 import { Button } from '@/components/ui/button';
 import { FilePlus2, Notebook } from 'lucide-react';
 import { useMemo } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export default function App() {
-  const { notes, selectedNoteId, editingNoteId, searchTerm, setEditingNoteId } = useNotes();
+  const { notes, selectedNoteId, editingNoteId, searchTerm, setEditingNoteId, setOpenMobile } = useNotes();
+  const isMobile = useIsMobile();
 
   const selectedNote = useMemo(() => notes.find(n => n.id === selectedNoteId), [notes, selectedNoteId]);
   
@@ -40,39 +42,52 @@ export default function App() {
     });
   }, [notes, searchTerm]);
 
+  const handleNewNoteClick = () => {
+    setEditingNoteId('new');
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  }
+
   return (
     <SidebarProvider>
-      <Sidebar collapsible="icon" className="border-r">
-        <SidebarHeader>
-          <div className="flex items-center gap-2 justify-between group-data-[collapsible=icon]:justify-center">
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" size="icon" className="shrink-0">
-                <Notebook className="size-5" />
-              </Button>
-              <h1 className="text-lg font-bold group-data-[collapsible=icon]:hidden">GreenNotes</h1>
+      <div className="flex w-full">
+        <Sidebar collapsible="icon" className="border-r">
+          <SidebarHeader>
+            <div className="flex items-center gap-2 justify-between group-data-[collapsible=icon]:justify-center">
+              <div className="flex items-center gap-2">
+                <Button variant="ghost" size="icon" className="shrink-0">
+                  <Notebook className="size-5" />
+                </Button>
+                <h1 className="text-lg font-bold group-data-[collapsible=icon]:hidden">GreenNotes</h1>
+              </div>
+              <SidebarTrigger className="group-data-[collapsible=icon]:hidden md:flex" />
             </div>
-            <SidebarTrigger className="group-data-[collapsible=icon]:hidden" />
-          </div>
-        </SidebarHeader>
-        <SidebarContent className="p-2">
-          <Button onClick={() => setEditingNoteId('new')} className="w-full justify-start" size="lg">
-            <FilePlus2 />
-            <span className="group-data-[collapsible=icon]:hidden">New Note</span>
-          </Button>
-          <NoteList notes={filteredNotes} />
-        </SidebarContent>
-      </Sidebar>
-      <SidebarInset>
-        <main className="h-full">
-          {editingNoteId ? (
-            <NoteEditor note={editingNote!} />
-          ) : selectedNote ? (
-            <NoteView note={selectedNote} />
-          ) : (
-            <Welcome />
-          )}
-        </main>
-      </SidebarInset>
+          </SidebarHeader>
+          <SidebarContent className="p-2">
+            <Button onClick={handleNewNoteClick} className="w-full justify-start" size="lg">
+              <FilePlus2 />
+              <span className="group-data-[collapsible=icon]:hidden">New Note</span>
+            </Button>
+            <NoteList notes={filteredNotes} />
+          </SidebarContent>
+        </Sidebar>
+        <SidebarInset>
+             <div className="p-4 md:hidden flex items-center justify-between">
+                <h1 className="text-lg font-bold">GreenNotes</h1>
+                <SidebarTrigger />
+            </div>
+          <main className="h-full">
+            {editingNoteId ? (
+              <NoteEditor note={editingNote!} />
+            ) : selectedNote ? (
+              <NoteView note={selectedNote} />
+            ) : (
+              <Welcome />
+            )}
+          </main>
+        </SidebarInset>
+      </div>
     </SidebarProvider>
   );
 }

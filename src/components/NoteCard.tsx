@@ -14,7 +14,7 @@ export default function NoteCard({ note }: NoteCardProps) {
   const isSelected = note.id === selectedNoteId;
 
   return (
-    <div className="group-data-[collapsible=icon]:hidden">
+    <div className="group-data-[collapsible=icon]:hidden md:group-data-[collapsible=icon]:block">
       <Card
         className={cn(
           'cursor-pointer transition-colors hover:bg-primary/10',

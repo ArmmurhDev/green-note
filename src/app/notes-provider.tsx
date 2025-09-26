@@ -17,6 +17,7 @@ export interface NotesContextType {
   selectNote: (id: string | null) => void;
   setEditingNoteId: (id: string | null) => void;
   setSearchTerm: (term: string) => void;
+  setOpenMobile: (open: boolean) => void;
 }
 
 export const NotesContext = createContext<NotesContextType | undefined>(undefined);
@@ -26,6 +27,7 @@ export function NotesProvider({ children }: { children: React.ReactNode }) {
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(initialNotes[0]?.id ?? null);
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [openMobile, setOpenMobile] = useState(false);
   const { toast } = useToast();
 
   const addNote = useCallback((note: Pick<Note, 'title' | 'content' | 'tags'>) => {
@@ -65,6 +67,7 @@ export function NotesProvider({ children }: { children: React.ReactNode }) {
   const selectNote = useCallback((id: string | null) => {
     if (editingNoteId) return;
     setSelectedNoteId(id);
+    setOpenMobile(false);
   }, [editingNoteId]);
 
   const contextValue = useMemo(
@@ -79,6 +82,7 @@ export function NotesProvider({ children }: { children: React.ReactNode }) {
       selectNote,
       setEditingNoteId,
       setSearchTerm,
+      setOpenMobile,
     }),
     [notes, selectedNoteId, editingNoteId, searchTerm, addNote, updateNote, deleteNote, selectNote]
   );
