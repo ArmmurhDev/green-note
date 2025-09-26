@@ -7,6 +7,7 @@ import { FilePenLine, Trash2 } from 'lucide-react';
 import TagBadge from './TagBadge';
 import { ScrollArea } from './ui/scroll-area';
 import { format } from 'date-fns';
+import { useEffect, useState } from 'react';
 
 interface NoteViewProps {
   note: Note;
@@ -14,6 +15,14 @@ interface NoteViewProps {
 
 export default function NoteView({ note }: NoteViewProps) {
   const { setEditingNoteId, deleteNote } = useNotes();
+  const [formattedDate, setFormattedDate] = useState('');
+
+  useEffect(() => {
+    if (note.updatedAt) {
+      setFormattedDate(format(new Date(note.updatedAt), "PPP p"));
+    }
+  }, [note.updatedAt]);
+
 
   return (
     <div className="flex flex-col h-full">
@@ -21,7 +30,7 @@ export default function NoteView({ note }: NoteViewProps) {
         <div className="flex flex-col">
           <h2 className="text-2xl font-bold">{note.title || 'Untitled Note'}</h2>
           <p className="text-xs text-muted-foreground">
-            Last updated: {format(new Date(note.updatedAt), "PPP p")}
+            Last updated: {formattedDate}
           </p>
         </div>
         <div className="flex gap-2">
