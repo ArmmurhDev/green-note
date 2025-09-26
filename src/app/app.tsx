@@ -12,17 +12,15 @@ import {
   SidebarHeader,
   SidebarInset,
   SidebarTrigger,
-  useSidebar,
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
-import { FilePlus2, Notebook } from 'lucide-react';
+import { FilePlus2, Notebook, PanelLeft } from 'lucide-react';
 import { useMemo } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 export default function App() {
-  const { notes, selectedNoteId, editingNoteId, searchTerm, setEditingNoteId } = useNotes();
-  const { openMobile, setOpenMobile } = useSidebar();
+  const { notes, selectedNoteId, editingNoteId, searchTerm, setEditingNoteId, openMobile, setOpenMobile } = useNotes();
   const isMobile = useIsMobile();
 
   const selectedNote = useMemo(() => notes.find(n => n.id === selectedNoteId), [notes, selectedNoteId]);
