@@ -42,25 +42,25 @@ export default function LoginPage() {
               />
             </div>
             <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
-                <Link
-                  href="/reset-password"
-                  className="ml-auto inline-block text-sm underline"
-                >
-                  Forgot your password?
-                </Link>
-              </div>
+              <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" required />
             </div>
-            <div className="flex items-center space-x-2">
-                <Checkbox id="remember-me" />
-                <Label
-                  htmlFor="remember-me"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Remember me
-                </Label>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                  <Checkbox id="remember-me" />
+                  <Label
+                    htmlFor="remember-me"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Remember me
+                  </Label>
+              </div>
+              <Link
+                href="/reset-password"
+                className="inline-block text-sm underline"
+              >
+                Forgot your password?
+              </Link>
             </div>
             <Button type="submit" className="w-full">
               Login
