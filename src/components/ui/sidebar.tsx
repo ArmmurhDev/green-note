@@ -194,7 +194,7 @@ const Sidebar = React.forwardRef<
 
     if (isMobile) {
       return (
-        <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
+        <Sheet open={openMobile} onOpenChange={setOpenMobile}>
           <SheetContent
             data-sidebar="sidebar"
             data-mobile="true"
@@ -205,6 +205,7 @@ const Sidebar = React.forwardRef<
               } as React.CSSProperties
             }
             side={side}
+            {...props}
           >
             <div className="flex h-full w-full flex-col">{children}</div>
           </SheetContent>
@@ -264,46 +265,29 @@ const SidebarTrigger = React.forwardRef<
   React.ComponentProps<typeof Button>
 >(({ className, onClick, ...props }, ref) => {
   const { toggleSidebar, isMobile } = useSidebar()
+  const triggerButton = (
+      <Button
+          ref={ref}
+          data-sidebar="trigger"
+          variant="ghost"
+          size="icon"
+          className={cn("h-7 w-7", className)}
+          onClick={(event) => {
+              onClick?.(event)
+              toggleSidebar()
+          }}
+          {...props}
+          >
+          <PanelLeft />
+          <span className="sr-only">Toggle Sidebar</span>
+      </Button>
+  );
 
   if (!isMobile) {
-      return (
-         <Button
-            ref={ref}
-            data-sidebar="trigger"
-            variant="ghost"
-            size="icon"
-            className={cn("h-7 w-7", className)}
-            onClick={(event) => {
-                onClick?.(event)
-                toggleSidebar()
-            }}
-            {...props}
-            >
-            <PanelLeft />
-            <span className="sr-only">Toggle Sidebar</span>
-        </Button>
-      )
+      return triggerButton;
   }
   
-  return (
-    <SheetTrigger asChild>
-         <Button
-            ref={ref}
-            data-sidebar="trigger"
-            variant="ghost"
-            size="icon"
-            className={cn("h-7 w-7", className)}
-            onClick={(event) => {
-                onClick?.(event)
-                toggleSidebar()
-            }}
-            {...props}
-            >
-            <PanelLeft />
-            <span className="sr-only">Toggle Sidebar</span>
-        </Button>
-    </SheetTrigger>
-  )
+  return <SheetTrigger asChild>{triggerButton}</SheetTrigger>;
 })
 SidebarTrigger.displayName = "SidebarTrigger"
 
@@ -397,8 +381,10 @@ const SidebarHeader = React.forwardRef<
     return (
       <SheetHeader className="p-4 flex flex-row items-center justify-between">
           <SheetTitle>GreenNotes</SheetTitle>
-          <SheetClose onClick={() => setOpenMobile(false)}>
+          <SheetClose asChild>
+            <Button variant="ghost" size="icon" onClick={() => setOpenMobile(false)}>
               <X className="h-4 w-4" />
+            </Button>
           </SheetClose>
       </SheetHeader>
     )
