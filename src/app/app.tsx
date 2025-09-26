@@ -16,10 +16,10 @@ import { Button } from '@/components/ui/button';
 import { FilePlus2, Notebook } from 'lucide-react';
 import { useMemo } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Sheet } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 export default function App() {
-  const { notes, selectedNoteId, editingNoteId, searchTerm, setEditingNoteId, setOpenMobile } = useNotes();
+  const { notes, selectedNoteId, editingNoteId, searchTerm, setEditingNoteId, openMobile, setOpenMobile } = useNotes();
   const isMobile = useIsMobile();
 
   const selectedNote = useMemo(() => notes.find(n => n.id === selectedNoteId), [notes, selectedNoteId]);
@@ -49,33 +49,64 @@ export default function App() {
     }
   }
 
+  const sidebarContent = (
+    <>
+      <SidebarHeader>
+        <div className="flex items-center gap-2 justify-between group-data-[collapsible=icon]:justify-center">
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="icon" className="shrink-0">
+              <Notebook className="size-5" />
+            </Button>
+            <h1 className="text-lg font-bold group-data-[collapsible=icon]:hidden">GreenNotes</h1>
+          </div>
+          <SidebarTrigger className="group-data-[collapsible=icon]:hidden md:flex" />
+        </div>
+      </SidebarHeader>
+      <SidebarContent className="p-2">
+        <Button onClick={handleNewNoteClick} className="w-full justify-start" size="lg">
+          <FilePlus2 />
+          <span className="group-data-[collapsible=icon]:hidden">New Note</span>
+        </Button>
+        <NoteList notes={filteredNotes} />
+      </SidebarContent>
+    </>
+  );
+
+  if (isMobile) {
+    return (
+       <Sheet open={openMobile} onOpenChange={setOpenMobile}>
+        <div className="flex w-full">
+            <SidebarInset>
+                <div className="p-4 flex items-center justify-between">
+                    <h1 className="text-lg font-bold">GreenNotes</h1>
+                    <SheetTrigger asChild>
+                      <SidebarTrigger />
+                    </SheetTrigger>
+                </div>
+              <main className="h-full">
+                {editingNoteId ? (
+                  <NoteEditor note={editingNote!} />
+                ) : selectedNote ? (
+                  <NoteView note={selectedNote} />
+                ) : (
+                  <Welcome />
+                )}
+              </main>
+            </SidebarInset>
+        </div>
+        <SheetContent side="left" className="w-full max-w-[18rem] bg-sidebar p-0 text-sidebar-foreground">
+          {sidebarContent}
+        </SheetContent>
+      </Sheet>
+    )
+  }
+
   return (
       <div className="flex w-full">
         <Sidebar collapsible="icon" className="border-r">
-          <SidebarHeader>
-            <div className="flex items-center gap-2 justify-between group-data-[collapsible=icon]:justify-center">
-              <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon" className="shrink-0">
-                  <Notebook className="size-5" />
-                </Button>
-                <h1 className="text-lg font-bold group-data-[collapsible=icon]:hidden">GreenNotes</h1>
-              </div>
-              <SidebarTrigger className="group-data-[collapsible=icon]:hidden md:flex" />
-            </div>
-          </SidebarHeader>
-          <SidebarContent className="p-2">
-            <Button onClick={handleNewNoteClick} className="w-full justify-start" size="lg">
-              <FilePlus2 />
-              <span className="group-data-[collapsible=icon]:hidden">New Note</span>
-            </Button>
-            <NoteList notes={filteredNotes} />
-          </SidebarContent>
+          {sidebarContent}
         </Sidebar>
         <SidebarInset>
-             <div className="p-4 md:hidden flex items-center justify-between">
-                <h1 className="text-lg font-bold">GreenNotes</h1>
-                <SidebarTrigger />
-            </div>
           <main className="h-full">
             {editingNoteId ? (
               <NoteEditor note={editingNote!} />

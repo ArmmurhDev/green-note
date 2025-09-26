@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
-import { Sheet, SheetContent, SheetHeader, SheetTrigger, SheetTitle, SheetClose } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from "@/components/ui/sheet"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
   Tooltip,
@@ -175,7 +175,12 @@ const Sidebar = React.forwardRef<
     },
     ref
   ) => {
-    const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
+    const { isMobile, state } = useSidebar()
+
+    if (isMobile) {
+      // On mobile, this component does nothing, the Sheet is handled in App.tsx
+      return null;
+    }
 
     if (collapsible === "none") {
       return (
@@ -189,27 +194,6 @@ const Sidebar = React.forwardRef<
         >
           {children}
         </div>
-      )
-    }
-
-    if (isMobile) {
-      return (
-        <Sheet open={openMobile} onOpenChange={setOpenMobile}>
-          <SheetContent
-            data-sidebar="sidebar"
-            data-mobile="true"
-            className="w-full bg-sidebar p-0 text-sidebar-foreground"
-            style={
-              {
-                "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
-              } as React.CSSProperties
-            }
-            side={side}
-            {...props}
-          >
-            <div className="flex h-full w-full flex-col">{children}</div>
-          </SheetContent>
-        </Sheet>
       )
     }
 
@@ -264,8 +248,8 @@ const SidebarTrigger = React.forwardRef<
   React.ElementRef<typeof Button>,
   React.ComponentProps<typeof Button>
 >(({ className, onClick, ...props }, ref) => {
-  const { toggleSidebar, isMobile } = useSidebar()
-  const triggerButton = (
+  const { toggleSidebar } = useSidebar()
+  return (
       <Button
           ref={ref}
           data-sidebar="trigger"
@@ -282,12 +266,6 @@ const SidebarTrigger = React.forwardRef<
           <span className="sr-only">Toggle Sidebar</span>
       </Button>
   );
-
-  if (!isMobile) {
-      return triggerButton;
-  }
-  
-  return <SheetTrigger asChild>{triggerButton}</SheetTrigger>;
 })
 SidebarTrigger.displayName = "SidebarTrigger"
 
