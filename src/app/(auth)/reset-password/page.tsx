@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Button } from "@/components/ui/button";
@@ -20,8 +21,7 @@ export default function ResetPasswordPage() {
     }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background p-4">
-      <Card className="mx-auto max-w-sm w-full">
+      <Card className="mx-auto max-w-sm w-full m-4">
         <CardHeader className="text-center">
             <div className="flex justify-center items-center mb-4">
                 <Notebook className="h-12 w-12 text-primary" />
@@ -54,6 +54,5 @@ export default function ResetPasswordPage() {
           </div>
         </CardContent>
       </Card>
-    </div>
   );
 }

@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Button } from "@/components/ui/button";
@@ -8,32 +9,31 @@ import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Notebook } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
 
-export default function SignupPage() {
+export default function LoginPage() {
     const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    const handleSignup = (e: React.FormEvent) => {
+    const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
         router.push('/notes');
     }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background p-4">
-      <Card className="mx-auto max-w-sm w-full">
+      <Card className="w-full max-w-sm m-4">
         <CardHeader className="text-center">
             <div className="flex justify-center items-center mb-4">
                 <Notebook className="h-12 w-12 text-primary" />
             </div>
-          <CardTitle className="text-2xl">Create an Account</CardTitle>
+          <CardTitle className="text-2xl">Login to GreenNotes</CardTitle>
           <CardDescription>
-            Enter your information to create an account
+            Enter your email below to login to your account
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSignup} className="grid gap-4">
+          <form onSubmit={handleLogin} className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -65,40 +65,34 @@ export default function SignupPage() {
                 </Button>
               </div>
             </div>
-             <div className="grid gap-2">
-              <Label htmlFor="confirm-password">Confirm Password</Label>
-              <div className="relative">
-                <Input id="confirm-password" type={showConfirmPassword ? "text" : "password"} required />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="absolute bottom-0 right-0 h-full px-3 py-2 hover:bg-transparent"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ? (
-                    <EyeOff className="h-4 w-4" aria-hidden="true" />
-                  ) : (
-                    <Eye className="h-4 w-4" aria-hidden="true" />
-                  )}
-                  <span className="sr-only">
-                    {showConfirmPassword ? "Hide password" : "Show password"}
-                  </span>
-                </Button>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                  <Checkbox id="remember-me" />
+                  <Label
+                    htmlFor="remember-me"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Remember me
+                  </Label>
               </div>
+              <Link
+                href="/reset-password"
+                className="inline-block text-sm underline"
+              >
+                Forgot your password?
+              </Link>
             </div>
             <Button type="submit" className="w-full">
-              Create account
+              Login
             </Button>
           </form>
           <div className="mt-4 text-center text-sm">
-            Already have an account?{" "}
-            <Link href="/login" className="underline">
-              Login
+            Don&apos;t have an account?{" "}
+            <Link href="/signup" className="underline">
+              Sign up
             </Link>
           </div>
         </CardContent>
       </Card>
-    </div>
   );
 }
