@@ -10,7 +10,6 @@ import {
   SidebarContent,
   SidebarHeader,
   SidebarInset,
-  SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
@@ -50,7 +49,6 @@ export default function App() {
   }
 
   return (
-    <SidebarProvider>
       <div className="flex w-full">
         <Sidebar collapsible="icon" className="border-r">
           <SidebarHeader>
@@ -88,6 +86,5 @@ export default function App() {
           </main>
         </SidebarInset>
       </div>
-    </SidebarProvider>
   );
 }
