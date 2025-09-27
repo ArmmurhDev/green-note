@@ -21,7 +21,7 @@ export default function ResetPasswordPage() {
     }
 
   return (
-      <Card className="mx-auto max-w-sm w-full">
+      <Card className="max-w-sm">
         <CardHeader className="text-center">
             <div className="flex justify-center items-center mb-4">
                 <Notebook className="h-12 w-12 text-primary" />
