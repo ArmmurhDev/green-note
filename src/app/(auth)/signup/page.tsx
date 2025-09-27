@@ -22,7 +22,7 @@ export default function SignupPage() {
     }
 
   return (
-      <Card className="max-w-sm">
+      <Card className="max-w-sm mx-auto">
         <CardHeader className="text-center">
             <div className="flex justify-center items-center mb-4">
                 <Notebook className="h-12 w-12 text-primary" />
