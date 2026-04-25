@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useTransition } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import React, { useTransition } from 'react';
+import { useForm } from 'react-hook-form';
 import type { Note } from '@/lib/types';
 import { useNotes } from '@/hooks/use-notes';
 import { Input } from './ui/input';
@@ -12,6 +12,8 @@ import { suggestTagsAction } from '@/app/actions';
 import TagBadge from './TagBadge';
 import { ScrollArea } from './ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { MobileHeader } from './MobileHeader';
 
 interface NoteEditorProps {
   note: Note;
@@ -20,10 +22,11 @@ interface NoteEditorProps {
 export default function NoteEditor({ note }: NoteEditorProps) {
   const { addNote, updateNote, setEditingNoteId } = useNotes();
   const { toast } = useToast();
-  const { register, handleSubmit, control, watch, setValue } = useForm<Note>({
+  const { register, handleSubmit, watch, setValue } = useForm<Note>({
     defaultValues: note,
   });
   const [isSuggesting, startSuggestionTransition] = useTransition();
+  const isMobile = useIsMobile();
 
   const currentTags = watch('tags');
 
@@ -79,19 +82,29 @@ export default function NoteEditor({ note }: NoteEditorProps) {
     }
   };
 
+  const headerActions = (
+    <div className="flex gap-2">
+      <Button type="button" variant="ghost" size="icon" onClick={() => setEditingNoteId(null)}>
+        <X className="h-4 w-4" />
+      </Button>
+      <Button type="submit">Save</Button>
+    </div>
+  );
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col h-full">
-      <div className="flex-none p-4 border-b flex items-center justify-between gap-4">
-        <h2 className="text-lg font-semibold">
-          {note.id === 'new' ? 'Create Note' : 'Edit Note'}
-        </h2>
-        <div className="flex gap-2">
-          <Button type="button" variant="ghost" size="icon" onClick={() => setEditingNoteId(null)}>
-            <X className="h-4 w-4" />
-          </Button>
-          <Button type="submit">Save</Button>
+      {isMobile ? (
+        <MobileHeader title={note.id === 'new' ? 'Create Note' : 'Edit Note'}>
+          {headerActions}
+        </MobileHeader>
+      ) : (
+        <div className="flex-none p-4 border-b flex items-center justify-between gap-4">
+          <h2 className="text-lg font-semibold">
+            {note.id === 'new' ? 'Create Note' : 'Edit Note'}
+          </h2>
+          {headerActions}
         </div>
-      </div>
+      )}
       <ScrollArea className="flex-1">
         <div className="p-6 space-y-6">
           <div>
@@ -112,14 +125,23 @@ export default function NoteEditor({ note }: NoteEditorProps) {
           <div>
             <div className="flex justify-between items-center mb-2">
               <label htmlFor="tags" className="text-sm font-medium">Tags</label>
-              <Button type="button" size="sm" variant="outline" onClick={handleSuggestTags} disabled={isSuggesting}>
-                {isSuggesting ? (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                  <Sparkles className="mr-2 h-4 w-4" />
-                )}
-                Suggest Tags
-              </Button>
+              <div>
+                {/* Mobile button */}
+                <Button type="button" size="sm" variant="outline" onClick={handleSuggestTags} disabled={isSuggesting} className="md:hidden w-9 px-0">
+                  {isSuggesting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                  <span className="sr-only">Suggest Tags</span>
+                </Button>
+
+                {/* Desktop button */}
+                <Button type="button" size="sm" variant="outline" onClick={handleSuggestTags} disabled={isSuggesting} className="hidden md:flex">
+                  {isSuggesting ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <Sparkles className="mr-2 h-4 w-4" />
+                  )}
+                  Suggest Tags
+                </Button>
+              </div>
             </div>
             <div className="p-2 border rounded-md min-h-[40px] flex flex-wrap gap-2">
                 {currentTags.map(tag => (

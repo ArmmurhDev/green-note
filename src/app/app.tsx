@@ -14,10 +14,10 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
-import { FilePlus2, Notebook, PanelLeft } from 'lucide-react';
+import { FilePlus2, Notebook } from 'lucide-react';
 import { useMemo } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent } from '@/components/ui/sheet';
 
 export default function App() {
   const { notes, selectedNoteId, editingNoteId, searchTerm, setEditingNoteId, openMobile, setOpenMobile } = useNotes();
@@ -78,15 +78,7 @@ export default function App() {
        <Sheet open={openMobile} onOpenChange={setOpenMobile}>
         <div className="flex w-full">
             <SidebarInset>
-                <div className="p-4 flex items-center justify-between">
-                    <h1 className="text-lg font-bold">GreenNotes</h1>
-                    <SheetTrigger asChild>
-                      <Button variant="ghost" size="icon">
-                        <PanelLeft />
-                      </Button>
-                    </SheetTrigger>
-                </div>
-              <main className="h-full">
+              <main className="h-full flex flex-col">
                 {editingNoteId ? (
                   <NoteEditor note={editingNote!} />
                 ) : selectedNote ? (

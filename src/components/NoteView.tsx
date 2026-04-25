@@ -8,6 +8,8 @@ import TagBadge from './TagBadge';
 import { ScrollArea } from './ui/scroll-area';
 import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { MobileHeader } from './MobileHeader';
 
 interface NoteViewProps {
   note: Note;
@@ -16,6 +18,7 @@ interface NoteViewProps {
 export default function NoteView({ note }: NoteViewProps) {
   const { setEditingNoteId, deleteNote } = useNotes();
   const [formattedDate, setFormattedDate] = useState('');
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (note.updatedAt) {
@@ -23,25 +26,43 @@ export default function NoteView({ note }: NoteViewProps) {
     }
   }, [note.updatedAt]);
 
+  const headerActions = (
+    <div className="flex gap-2">
+      <Button type="button" variant="outline" size="icon" onClick={() => deleteNote(note.id)}>
+        <Trash2 className="h-4 w-4" />
+        <span className="sr-only">Delete</span>
+      </Button>
+      <Button size="icon" onClick={() => setEditingNoteId(note.id)}>
+        <FilePenLine className="h-4 w-4" />
+        <span className="sr-only">Edit</span>
+      </Button>
+    </div>
+  );
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-none p-4 border-b flex items-center justify-between gap-4">
-        <div className="flex flex-col">
-          <h2 className="text-2xl font-bold">{note.title || 'Untitled Note'}</h2>
-          <p className="text-xs text-muted-foreground">
-            Last updated: {formattedDate}
-          </p>
+      {isMobile ? (
+        <MobileHeader title={note.title || 'Untitled Note'}>
+          {headerActions}
+        </MobileHeader>
+      ) : (
+        <div className="flex-none p-4 border-b flex items-center justify-between gap-4">
+          <div className="flex flex-col min-w-0">
+            <h2 className="text-2xl font-bold truncate">{note.title || 'Untitled Note'}</h2>
+            <p className="text-xs text-muted-foreground">
+              Last updated: {formattedDate}
+            </p>
+          </div>
+          <div className="flex gap-2 shrink-0">
+            <Button type="button" variant="outline" onClick={() => deleteNote(note.id)}>
+              <Trash2 className="mr-2 h-4 w-4" /> Delete
+            </Button>
+            <Button onClick={() => setEditingNoteId(note.id)}>
+              <FilePenLine className="mr-2 h-4 w-4" /> Edit
+            </Button>
+          </div>
         </div>
-        <div className="flex gap-2">
-          <Button type="button" variant="outline" onClick={() => deleteNote(note.id)}>
-            <Trash2 className="mr-2 h-4 w-4" /> Delete
-          </Button>
-          <Button onClick={() => setEditingNoteId(note.id)}>
-            <FilePenLine className="mr-2 h-4 w-4" /> Edit
-          </Button>
-        </div>
-      </div>
+      )}
       <ScrollArea className="flex-1">
         <div className="p-6">
           <article className="prose prose-stone dark:prose-invert max-w-none text-foreground">
